@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Source2ES5</title>
+</head>
+<body>
+<label for = "in">Source:</label><textarea rows="20" cols="200" id = "in"></textarea>
+<h3>ES5:</h3>
+<pre id = "out">
+
+</pre>
+<script src = "parser.js">
+</script>
+<script>
+  const i = document.getElementById("in");
+  const o = document.getElementById("out");
+  i.addEventListener('input', () => o.innerHTML = parser.parse(i.value));
+</script>
+
+</body>
+</html>
