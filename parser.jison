@@ -392,6 +392,7 @@ constants
     { $$ = 'Infinity'; }
 
   | quotedstring
+    { $$ = '"' + $1 + '"'; }
 
   | 'emptylist'
     { $$ = 'null'; }
@@ -401,39 +402,39 @@ quotedstring
   :
     'EmptyString'
   {
-    $$ = '""';
+    $$ = '';
   }
   | 'QuotedString'
   | 'QuotedStringEscape'
   {
     switch (yytext)
     {
-      case 'b':   $$ = '\b'; break;
-      case 'n':   $$ = '\n'; break;
-      case 'r':   $$ = '\r'; break;
-      case 't':   $$ = '\t'; break;
-      case "'":   $$ = "'"; break;
-      case '"':   $$ = '"'; break;
-      case '\\':    $$ = '\\'; break;
+      case 'b':   $$ = '\\b'; break;
+      case 'n':   $$ = '\\n'; break;
+      case 'r':   $$ = '\\r'; break;
+      case 't':   $$ = '\\t'; break;
+      case "'":   $$ = "\\'"; break;
+      case '"':   $$ = '\\"'; break;
+      case '\\':    $$ = '\\\\'; break;
       case '\n':
       case '\r\n':  $$ = ''; break;
-      default:    $$ = '\\' + $1; break;
+      default:    $$ = '\\\\' + $1; break;
     }
   }
   | 'QuotedStringEscape' quotedstring
   {
     switch ($1)
     {
-      case 'b':   $$ = '\b'; break;
-      case 'n':   $$ = '\n'; break;
-      case 'r':   $$ = '\r'; break;
-      case 't':   $$ = '\t'; break;
-      case "'":   $$ = "'"; break;
-      case '"':   $$ = '"'; break;
-      case '\\':    $$ = '\\'; break;
+      case 'b':   $$ = '\\b'; break;
+      case 'n':   $$ = '\\n'; break;
+      case 'r':   $$ = '\\r'; break;
+      case 't':   $$ = '\\t'; break;
+      case "'":   $$ = "\\'"; break;
+      case '"':   $$ = '\\"'; break;
+      case '\\':    $$ = '\\\\'; break;
       case '\n':
       case '\r\n':  $$ = ''; break;
-      default:    $$ = '\\' + $1; break;
+      default:    $$ = '\\\\' + $1; break;
     }
     $$ += $2;
   }

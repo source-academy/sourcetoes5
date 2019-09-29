@@ -15,7 +15,15 @@
 <script>
   const i = document.getElementById("in");
   const o = document.getElementById("out");
-  i.addEventListener('input', () => o.innerHTML = parser.parse(i.value));
+  i.addEventListener('input', () => {
+    let result;
+    try {
+      result = parser.parse(i.value);
+    } catch (e) {
+      result = e;
+    }
+    o.innerHTML = result;
+  });
 </script>
 
 </body>
