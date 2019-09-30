@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tests</title>
+  <style>
+    .in {
+      background-color: lightgrey;
+    }
+    .out-success {
+      background-color: lightgreen;
+    }
+    .out-failure {
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+<div id = "result"></div>
+<script src = "tests.js"></script><script src = "parser.js"></script>
+<script>
+  let result = '';
+  for (const code of tests) {
+    result += `<pre class='in'>${code}</pre>`;
+    try {
+      result +=`<pre class='out-success'>${parser.parse(code)}</pre>`;
+    } catch (e) {
+      result += `<pre class='out-failure'>${e}</pre>`;
+    }
+    result += '<hr>';
+    document.getElementById("result").innerHTML = result;
+  }
+</script>
+</body>
+</html>
