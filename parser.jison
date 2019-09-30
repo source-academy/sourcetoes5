@@ -122,7 +122,7 @@
 
 program
   : statements EOF
-    { return $1; }
+    {{ counter = 0; return $1; }}
   ;
 
 statements
@@ -341,34 +341,37 @@ expression
       $$ = $1 + "[" + $3 + "]"
     }}
 
-  | '(' expression ')'
-    {$$ = "(" + $2 + ")";}
-
   | constants
     { $$ = $1; }
 
   | identifier
     { $$ = $1[1]; }
 
-  | '(' expression ')' '(' expressions ')'
-    {{
-      $$ = "(" + $2 + ")(" + $5 + ")";
-    }}
-
   | '[' expressions ']'
     {{
       $$ = "[" + $2 + "]";
     }}
+  | wrappedexpressions
 
-  | identifier '(' expressions ')'
-    {{
-      $$ = $1[1] + "(" + $3 + ")";
-    }}
+  | identifier wrappedexpressions
+    {{ $$ = $1[1] + $2}}
 
   | expression '?' expression ':' expression
     {{
       $$ = $1 + "?" + $3 + ":" + $5;
     }}
+  ;
+
+wrappedexpressions
+  :
+  '(' ')'
+  { $$ = "()"; }
+  | '(' expression ')'
+  { $$ = "(" + $2 + ")"; }
+  | '(' expression ')' wrappedexpressions
+  { $$ = "(" + $2 + ")" + $4; }
+  | '(' ')' wrappedexpressions
+  { $$ = "()" + $3; }
   ;
 
 constants
