@@ -412,7 +412,7 @@ quotedstring
       case 'r':   $$ = '\\r'; break;
       case 't':   $$ = '\\t'; break;
       case "'":   $$ = "\\'"; break;
-      case '"':   $$ = '\\"'; break;
+      case '"':   $$ = '\"'; break;
       case '\\':    $$ = '\\\\'; break;
       case '\n':
       case '\r\n':  $$ = ''; break;
@@ -428,7 +428,7 @@ quotedstring
       case 'r':   $$ = '\\r'; break;
       case 't':   $$ = '\\t'; break;
       case "'":   $$ = "\\'"; break;
-      case '"':   $$ = '\\"'; break;
+      case '"':   $$ = '\"'; break;
       case '\\':    $$ = '\\\\'; break;
       case '\n':
       case '\r\n':  $$ = ''; break;
