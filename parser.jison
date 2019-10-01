@@ -236,7 +236,7 @@ forstatement
 
 forinitialiser
   :
-  letdeclaration
+  declaration
   | assignment ';'
   {{
       $$ = $1 + ";";
