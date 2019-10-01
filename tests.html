@@ -23,9 +23,11 @@
   for (const code of tests) {
     result += `<pre class='in'>${code}</pre>`;
     try {
-      result +=`<pre class='out-success'>${parser.parse(code)}</pre>`;
+      const parsed = parser.parse(code);
+      eval(`()=>{${parsed}}`);
+      result +=`<pre class='out-success'>${new Option(parsed).innerHTML}</pre>`;
     } catch (e) {
-      result += `<pre class='out-failure'>${e}</pre>`;
+      result += `<pre class='out-failure'>${new Option(e).innerHTML}</pre>`;
     }
     result += '<hr>';
     document.getElementById("result").innerHTML = result;

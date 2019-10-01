@@ -18,9 +18,9 @@
   i.addEventListener('input', () => {
     let result;
     try {
-      result = parser.parse(i.value);
+      result = new Option(parser.parse(i.value)).innerHTML;
     } catch (e) {
-      result = e;
+      result = new Option(e).innerHTML;
     }
     o.innerHTML = result;
   });

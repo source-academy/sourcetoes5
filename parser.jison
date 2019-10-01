@@ -273,15 +273,15 @@ expression
     }}
   | '-' expression %prec UMINUS
     {{
-      $$ = "-" + $1;
+      $$ = "-" + $2;
     }}
   | '+' expression %prec UPLUS
     {{
-      $$ = "+" + $1;
+      $$ = "+" + $2;
     }}
   | '!' expression
     {{
-      $$ = "!" + $1;
+      $$ = "!" + $2;
     }}
   | expression '&&' expression
     {{
