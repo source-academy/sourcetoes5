@@ -390,7 +390,7 @@ constants
     { $$ = 'Infinity'; }
 
   | quotedstring
-    { $$ = '"' + $1 + '"'; }
+    { $$ = '"' + $1.replace(/\"/g,'\\\"') + '"'; }
 
   | 'emptylist'
     { $$ = 'null'; }
