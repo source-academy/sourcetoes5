@@ -347,10 +347,6 @@ expression
   | identifier
     { $$ = $1[1]; }
 
-  | '[' expressions ']'
-    {{
-      $$ = "[" + $2 + "]";
-    }}
   | wrappedexpressions
 
   | identifier wrappedexpressions
@@ -365,8 +361,12 @@ expression
 wrappedexpressions
   :'(' expressions ')'
   { $$ = "(" + $2 + ")"; }
+  |'[' expressions ']'
+  { $$ = "[" + $2 + "]"; }
   | '(' expressions ')' wrappedexpressions
   { $$ = "(" + $2 + ")" + $4; }
+  | '[' expressions ']' wrappedexpressions
+  { $$ = "[" + $2 + "]" + $4; }
   ;
 
 constants
