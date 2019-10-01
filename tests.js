@@ -7,26 +7,142 @@ if (a === 1) {
 } else {
   const a = 3;
   b + a;
-}`
-  , `const f = 1;
+}`,
+  `const f = 1;
 function f(a, b, c) {
   return a + b + c + f;
-}`
-  , `const f = 1;
+}`,
+  `const f = 1;
 function g(x) {
   return (x => x)(x);
-}`
-  , `const x = 1;
+}`,
+  `const x = 1;
 function g(y) {
   return f(x)(x);
-}`
-  , `const x = 1;
+}`,
+  `const x = 1;
 function g(y) {
   return f(x=>x)(y=>x)(x=>y(y)(y)(x)(x=>x+1+f()));
-}`
-];
-var x$0 = 1;
-
-function g$1 (y$2) {
-  return f$0((function (x$3) { return x$3;}))((function (y$4) { return x$0;}))((function (x$5) { return y$2(y$2)(y$2)(x$5)((function (x$6) { return x$6 + 1 + f$0();}));}));
-}
+}`,
+  'im_undefined;',
+  '"enable verbose";\nim_undefined;',
+  'im_undefined;',
+  '"enable verbose";\nim_undefined;',
+  'map = 5;',
+  '"enable verbose";\nmap = 5;',
+  'map = 5;',
+  '"enable verbose";\nmap = 5;',
+  'undefined = 5;',
+  '"enable verbose";\nundefined = 5;',
+  'undefined = 5;',
+  '',
+  "'42';",
+  '25*(display(1+1));',
+  '42;',
+  'true;',
+  '() => 42;',
+  'stringify(pair);',
+  'toString(pair);',
+  'toString({a: 1});',
+  'toString([1, 2]);',
+  'function f(x) {\n  return 5;\n}\ntoString(a=>a) + toString(f);',
+  '\n    function unreachable() {\n      return 1 < true; // Will cause an error\n    }\n    function f() {\n      unreachable();\n      return 0;\n    }\n    f();\n  ',
+  '\n    function unreachable() {\n      return 1 < true; // Will cause an error\n    }\n    function f() {\n      return 1;\n      unreachable();\n      return 0;\n      unreachable();\n    }\n    f();\n  ',
+  '\n    function unreachable() {\n      return 1 < true; // Will cause an error\n    }\n    function id(x) {\n      return x;\n    }\n    function f() {\n      return id(1) + id(2);\n      unreachable();\n      return 0;\n      unreachable();\n    }\n    f();\n  ',
+  '\n    function unreachable() {\n      return 1 < true; // Will cause an error\n    }\n    function id(x) {\n      return x;\n    }\n    function f() {\n      return id(1);\n      unreachable();\n      return 0;\n      unreachable();\n    }\n    f();\n  ',
+  '\n    function unreachable() {\n      return 1 < true; // Will cause an error\n    }\n    function f() {\n      if (true) {\n        return 1;\n        unreachable();\n      } else {}\n      unreachable();\n      return 0;\n      unreachable();\n    }\n    f();\n  ',
+  '\n    function unreachable() {\n      return 1 < true; // Will cause an error\n    }\n    function id(x) {\n      return x;\n    }\n    function f() {\n      if (true) {\n        return id(1) + id(2);\n        unreachable();\n      } else {}\n      unreachable();\n      return 0;\n      unreachable();\n    }\n    f();\n  ',
+  '\n    function unreachable() {\n      return 1 < true; // Will cause an error\n    }\n    function id(x) {\n      return x;\n    }\n    function f() {\n      if (true) {\n        return id(1);\n        unreachable();\n      } else {}\n      unreachable();\n      return 0;\n      unreachable();\n    }\n    f();\n  ',
+  '\n    function unreachable() {\n      return 1 < true; // Will cause an error\n    }\n    function f() {\n      while (true) {\n        return 1;\n        unreachable();\n      }\n      unreachable();\n      return 0;\n      unreachable();\n    }\n    f();\n  ',
+  '\n    function unreachable() {\n      return 1 < true; // Will cause an error\n    }\n    function id(x) {\n      return x;\n    }\n    function f() {\n      while (true) {\n        return id(1) + id(2);\n        unreachable();\n      }\n      unreachable();\n      return 0;\n      unreachable();\n    }\n    f();\n  ',
+  '\n    function unreachable() {\n      return 1 < true; // Will cause an error\n    }\n    function id(x) {\n      return x;\n    }\n    function f() {\n      while (true) {\n        return id(1);\n        unreachable();\n      }\n      unreachable();\n      return 0;\n      unreachable();\n    }\n    f();\n  ',
+  '\n    function unreachable() {\n      return 1 < true; // Will cause an error\n    }\n    function f() {\n      for (let i = 0; i < 100; i = i + 1) {\n        return i+1;\n        unreachable();\n      }\n      unreachable();\n      return 0;\n      unreachable();\n    }\n    f();\n  ',
+  'function f() { return 1; }\nlist(1, \'a string ""\', () => f, f, true, 3.14);',
+  'pair(1, \'a string ""\');',
+  'head(pair(1, \'a string ""\'));',
+  'tail(pair(1, \'a string ""\'));',
+  'tail(list(1));',
+  'list();',
+  'let sum = 0;\nfor_each(x => {\n  sum = sum + x;\n}, list(1, 2, 3));\nsum;',
+  'equal(map(x => 2 * x, list(12, 11, 3)), list(24, 22, 6));',
+  'equal(filter(x => x <= 4, list(2, 10, 1000, 1, 3, 100, 4, 5, 2, 1000)), list(2, 1, 3, 4, 2));',
+  'equal(build_list(5, x => x * x), list(0, 1, 4, 9, 16));',
+  'equal(reverse(list("string", null, undefined, null, 123)), list(123, null, undefined, null, "string"));',
+  '',
+  'parse("");',
+  'function name(a, b) {\n  const sum = a + b;\n  if (sum > 1) {\n    return sum;\n  } else {\n    if (a % 2 === 0) {\n      return -1;\n    } else if (b % 2 === 0) {\n      return 1;\n    } else {\n      return a > b ? 0 : -2;\n    }\n  }\n}\nname(1, 2);',
+  'parse("function name(a, b) {\\n  const sum = a + b;\\n  if (sum > 1) {\\n    return sum;\\n  } else {\\n    if (a % 2 === 0) {\\n      return -1;\\n    } else if (b % 2 === 0) {\\n      return 1;\\n    } else {\\n      return a > b ? 0 : -2;\\n    }\\n  }\\n}\\nname(1, 2);");',
+  '(() => true)();',
+  'parse("(() => true)();");',
+  '((x, y) => { return x + y; })(1, 2);',
+  'parse("((x, y) => { return x + y; })(1, 2);");',
+  'true;',
+  'parse("true;");',
+  'false;',
+  "display('message');",
+  "error('error!');",
+  'is_undefined(undefined);',
+  'is_undefined(null);',
+  'is_null(undefined);',
+  'is_null(null);',
+  "is_string('string');",
+  "is_string('true');",
+  "is_string('1');",
+  'is_string(true);',
+  'is_string(1);',
+  'stringify(0);',
+  "stringify('a string');",
+  "stringify('true');",
+  'function f(x, y) {\n  return x;\n}\nstringify(f);',
+  'const f = (x, y) => x;\nstringify(f);',
+  "const xs = [1, 'true', true, () => 1];\nstringify(xs);",
+  "const xs = [1, 'true', [true, () => 1, [[]]]];\nstringify(xs);",
+  'const xs = [];\nstringify(xs);',
+  'stringify(enum_list(1, 10));',
+  'stringify(enum_list(1, 100));',
+  'const arr = [];\nfor (let i = 0; i < 100; i = i + 1) {\n  arr[i] = i;\n}\nstringify(arr);',
+  'stringify(parse(""), undefined, 2);',
+  'stringify(parse("3; true; false; \'\'; \\"\\"; \'bob\'; 1; 20;"), undefined, 2);',
+  'stringify(parse("x;"), undefined, 2);',
+  'stringify(parse("x; moreNames; undefined;"), undefined, 2);',
+  'stringify(parse("3 + 5 === 8 || !true && false;"), undefined, 2);',
+  'stringify(parse("const x = 5; let y = x;"), undefined, 2);',
+  'stringify(parse("x = 5; x = x; if (true) { x = 5; } else {}"), undefined, 2);',
+  'stringify(parse("if (true) { hi; } else { haha; } if (false) {} else {}"), undefined, 2);',
+  'stringify(parse("(x, y) => x + 1;"), undefined, 2);',
+  'stringify(parse("(x, y) => x + 1;"), undefined, 2);',
+  'stringify(parse("const y = (x, y) => x + 1;"), undefined, 2);',
+  'for(; i < 3; i = i + 1) {\n  break;\n}',
+  '"enable verbose";\n for(; i < 3; i = i + 1) {\nbreak;\n }',
+  'for(let i = 0; ; i = i + 1) {\n  break;\n}',
+  '"enable verbose";\n for(let i = 0; ; i = i + 1) {\nbreak;\n }',
+  'for(let i = 0; i < 3;) {\n  break;\n}',
+  '"enable verbose";\n   for(let i = 0; i < 3;) {\n     break;\n   }',
+  'for(;;) {\n  break;\n}',
+  '"enable verbose";\n for(;;) {\nbreak;\n }',
+  'while() {\n  x;\n}',
+  '"enable verbose";\n while() {\n   x;\n }',
+  'let x = 3;\nx++;\nx;',
+  'stream();',
+  'head(stream_tail(stream(1, 2)));',
+  'stream_tail(integers_from(0));',
+  'stream_length(integers_from(0));',
+  "const s = stream(true, false, undefined, 1, x=>x, null, -123, head);\nconst result = [];\nstream_for_each(item => {result[array_length(result)] = item;}, s);\nstream_ref(s,4)(22) === 22 && stream_ref(s,7)(pair('', '1')) === '1' && result;",
+  'stream_to_list(null);',
+  'stream_to_list(stream(1, true, 3, 4.4, [1, 2]));',
+  'let sum = 0;\nstream_for_each(x => {\n  sum = sum + x;\n}, stream(1, 2, 3));\nsum;',
+  'equal(stream_to_list(stream_map(x => 2 * x, stream(12, 11, 3))), list(24, 22, 6));',
+  'equal(\n  stream_to_list(\n    stream_filter(x => x <= 4, stream(2, 10, 1000, 1, 3, 100, 4, 5, 2, 1000))\n  )\n, list(2, 1, 3, 4, 2));',
+  'equal(stream_to_list(build_stream(5, x => x * x)), list(0, 1, 4, 9, 16));',
+  'function test(){\n  const x = true;\n  {\n      const x = false;\n  }\n  return x;\n}\ntest();',
+  'function test(){\n  const x = true;\n  if(true) {\n      const x = false;\n  } else {\n      const x = false;\n  }\n  return x;\n}\ntest();',
+  'function test(){\n  let x = true;\n  if(true) {\n      let x = false;\n  } else {\n      let x = false;\n  }\n  return x;\n}\ntest();',
+  'function test(){\n  let x = true;\n  for (let x = 1; x > 0; x = x - 1) {\n  }\n  return x;\n}\ntest();',
+  'function test(){\n  let x = true;\n  while (true) {\n    let x = false;\n    break;\n  }\n  return x;\n}\ntest();',
+  'function test(){\n  let z = [];\n  for (let x = 0; x < 10; x = x + 1) {\n    z[x] = () => x;\n  }\n  return z[1]();\n}\ntest();',
+  'function test(){\n    let z = [];\n    for (let x = 0; x < 2; x = x + 1) {\n      x = 1;\n    }\n    return false;\n}\ntest();',
+  'const v = f();\nfunction f() {\n  return 1;\n}\nv;',
+  'const a = 1;\nfunction f() {\n  display(a);\n  const a = 5;\n}\nf();',
+  'const a = 1;\n{\n  a + a;\n  const a = 10;\n}',
+  'let variable = 1;\nfunction test(){\n  variable = 100;\n  let variable = true;\n  return variable;\n}\ntest();'
+]
