@@ -363,15 +363,10 @@ expression
   ;
 
 wrappedexpressions
-  :
-  '(' ')'
-  { $$ = "()"; }
-  | '(' expression ')'
+  :'(' expressions ')'
   { $$ = "(" + $2 + ")"; }
-  | '(' expression ')' wrappedexpressions
+  | '(' expressions ')' wrappedexpressions
   { $$ = "(" + $2 + ")" + $4; }
-  | '(' ')' wrappedexpressions
-  { $$ = "()" + $3; }
   ;
 
 constants
