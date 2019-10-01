@@ -336,11 +336,6 @@ expression
 	  $$ = "(function(" + $1 + "){ " + $3 + "})";
 	}}
 
-  | expression '[' expression ']'
-    {{
-      $$ = $1 + "[" + $3 + "]"
-    }}
-
   | constants
     { $$ = $1; }
 
