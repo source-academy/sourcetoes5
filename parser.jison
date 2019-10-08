@@ -5,25 +5,59 @@
 %{
   var counter = 0;
   var stack = [{}];
-  function getRenamedVarIfPossible(id) {
-  	for (var i = stack.length - 1; i >= 0; i--) {
-  		if (stack[i].hasOwnProperty(id)) {
-  			return stack[i][id];
-  		}
+  resetParser = function() {
+    counter = 0;
+    stack = [{}];
+  }
+  function getRenamedVarIfPossible(env, id) {
+    while (env) {
+        if (env.hasOwnProperty(id)) {
+            return env[id];
+        }
+        env = env["#parent"];
   	}
   	return id;
   }
+  function currentEnv() {
+    return stack[stack.length - 1];
+  }
   function getNewName(id) {
     const newName = id + "$" + counter
-    stack[stack.length - 1][id] = newName;
+    currentEnv()[id] = newName;
     counter++;
     return newName;
   }
   function pushStack() {
-  	stack.push({});
+  	stack.push({"#parent": currentEnv()});
   }
   function popStack() {
   	stack.pop();
+  }
+  function flatten(array) {
+      var result = [];
+      var nodes = array;
+      var node;
+
+      if (!array.length) {
+          return result;
+      }
+
+      node = nodes.pop();
+
+      do {
+          if (Array.isArray(node)) {
+              [].push.apply(nodes, node);
+          } else {
+            if (typeof node === "string") {
+              result.push(node);
+            } else {
+              result.push(getRenamedVarIfPossible(node.env, node.id));
+            }
+          }
+      } while (nodes.length && (node = nodes.pop()) !== undefined);
+
+      result.reverse(); // we reverse result to restore the original order
+      return result.join("");
   }
 %}
 %lex
@@ -122,14 +156,14 @@
 
 program
   : statements EOF
-    {{ counter = 0; return $1; }}
+    {{ return flatten($1); }}
   ;
 
 statements
   :
     { $$ = ""; }
   | statement statements
-    { $$ = $1 + "\n" + $2; }
+    { $$ = [$1 , "\n" , $2]; }
   ;
 
 functionid
@@ -151,26 +185,26 @@ statement
   | functionid wrappedparams leftbrace statements rightbrace
     {{
       popStack();
-      $$ = "function " + $1 + "(" + $2 + ") {" + $4 + "}" ;
+      $$ = ["function " , $1 , "(" , $2 , ") {" , $4 , "}"] ;
     }}
   | declaration
   | leftbrace statements rightbrace
         {{
-      $$ = "{" + $2 + "}";
+      $$ = ["{" , $2 , "}"];
         }}
 
   | assignment ';'
       {{
-      $$ = $1 + ";";
+      $$ = [$1 , ";"];
         }}
 
   | expression ';'
     {{
-      $$ = $1 + ";";
+      $$ = [$1 , ";"];
         }}
   | 'return' expression ';'
     {{
-      $$ = "return " + $2 + ";";
+      $$ = ["return " , $2 , ";"];
         }}
 
 
@@ -190,7 +224,7 @@ declaration
   declarator identifier '=' expression ';'
     {{
       var newName = getNewName($2[0]);
-      $$ = "var " + newName + "=" + $4 + ";";
+      $$ = ["var " , newName , "=" , $4 , ";"];
     }}
   ;
 
@@ -201,7 +235,7 @@ assignment
   :
   expression '=' expression
     {{
-      $$ = $1 + "=" + $3;
+      $$ = [$1 , "=" , $3];
     }}
   ;
 
@@ -209,11 +243,11 @@ ifstatement
   :
   'if' '(' expression ')' leftbrace statements rightbrace 'else' leftbrace statements rightbrace
     {{
-      $$ = "if (" + $3 + ") {" + $6 + "} else {" + $10 + "}";
+      $$ = ["if (" , $3 , ") {" , $6 , "} else {" , $10 , "}"];
     }}
   | 'if' '(' expression ')' leftbrace statements rightbrace 'else' ifstatement
     {{
-      $$ = "if (" + $3 + ") {" + $6 + "} else " + $9;
+      $$ = ["if (" , $3 , ") {" , $6 , "} else " , $9];
     }}
   ;
 
@@ -222,7 +256,7 @@ whilestatement
   :
   'while' '(' expression ')' leftbrace statements rightbrace
     {{
-      $$ = "while (" + $3 + ") {" + $6 + "}";
+      $$ = ["while (" , $3 , ") {" , $6 , "}"];
     }}
   ;
 
@@ -230,7 +264,7 @@ forstatement
   :
     'for' '(' forinitialiser expression ';' forfinaliser ')' leftbrace statements rightbrace
     {{
-      $$ = "for (" + $3 + $4 + ";" + $6 + ") {" + $9 + "}";
+      $$ = ["for (" , $3 , $4 , ";" , $6 , ") {" , $9 , "}"];
     }}
   ;
 
@@ -239,7 +273,7 @@ forinitialiser
   declaration
   | assignment ';'
   {{
-      $$ = $1 + ";";
+      $$ = [$1 , ";"];
     }}
   ;
 
@@ -253,120 +287,115 @@ expression
   :
   expression '+' expression
     {{
-      $$ = $1 + "+" + $3;
+      $$ = [$1 , "+" , $3];
     }}
   | expression '-' expression
     {{
-      $$ = $1 + "-" + $3;
+      $$ = [$1 , "-" , $3];
     }}
   | expression '*' expression
     {{
-      $$ = $1 + "*" + $3;
+      $$ = [$1 , "*" , $3];
     }}
   | expression '/' expression
     {{
-      $$ = $1 + "/" + $3;
+      $$ = [$1 , "/" , $3];
     }}
   | expression '%' expression
     {{
-      $$ = $1 + "%" + $3;
+      $$ = [$1 , "%" , $3];
     }}
   | '-' expression %prec UMINUS
     {{
-      $$ = "-" + $2;
+      $$ = ["-" , $2];
     }}
   | '+' expression %prec UPLUS
     {{
-      $$ = "+" + $2;
+      $$ = ["," , $2];
     }}
   | '!' expression
     {{
-      $$ = "!" + $2;
+      $$ = ["!" , $2];
     }}
   | expression '&&' expression
     {{
-      $$ = $1 + "&&" + $3;
+      $$ = [$1 , "&&" , $3];
     }}
   | expression '||' expression
     {{
-      $$ = $1 + "||" + $3;
+      $$ = [$1 , "||" , $3];
     }}
   | expression '===' expression
     {{
-      $$ = $1 + "===" + $3;
+      $$ = [$1 , "===" , $3];
     }}
   | expression '!==' expression
     {{
-      $$ = $1 + "!==" + $3;
+      $$ = [$1 , "!==" , $3];
     }}
   | expression '>' expression
     {{
-      $$ = $1 + ">" + $3;
+      $$ = [$1 , ">" , $3];
     }}
   | expression '<' expression
     {{
-      $$ = $1 + "<" + $3;
+      $$ = [$1 , "<" , $3];
     }}
   | expression '>=' expression
     {{
-      $$ = $1 + ">=" + $3;
+      $$ = [$1 , ">=" , $3];
     }}
   | expression '<=' expression
     {{
-      $$ = $1 + "<=" + $3;
+      $$ = [$1 , "<=" , $3];
     }}
   | wrappedparams '=>' expression    %prec ARROW
     {{
       popStack();
-      $$ = "(function(" + $1 + "){ return " + $3 + ";})";
+      $$ = ["(function(" , $1 , "){ return " , $3 , ";})"];
     }}
   | wrappedparams '=>' leftbrace statements rightbrace    %prec ARROW
     {{
       popStack();
-      $$ = "(function(" + $1 + "){ " + $4 + "})";
+      $$ = ["(function(" , $1 , "){ " , $4 , "})"];
     }}
   | idarrow expression
     {{
       popStack();
-      $$ = "(function(" + $1 + "){ return " + $2 + ";})";
+      $$ = ["(function(" , $1 , "){ return " , $2 , ";})"];
     }}
   | idarrow leftbrace statements rightbrace
 	{{
 	  popStack();
-	  $$ = "(function(" + $1 + "){ " + $3 + "})";
+	  $$ = ["(function(" , $1 , "){ " , $3 , "})"];
 	}}
-
-  | expression '[' expression ']'
-    {{
-      $$ = $1 + "[" + $3 + "]"
-    }}
 
   | constants
     { $$ = $1; }
 
-  | identifier
-    { $$ = $1[1]; }
-
   | wrappedexpressions
 
   | identifier wrappedexpressions
-    {{ $$ = $1[1] + $2}}
+    {{ $$ = [$1[1] , $2]}}
 
   | expression '?' expression ':' expression
     {{
-      $$ = $1 + "?" + $3 + ":" + $5;
+      $$ = [$1 , "?" , $3 , ":" , $5];
     }}
+
+  | identifier
+    { $$ = $1[1]; }
   ;
 
 wrappedexpressions
   :'(' expressions ')'
-  { $$ = "(" + $2 + ")"; }
+  { $$ = ["(" , $2 , ")"]; }
   |'[' expressions ']'
-  { $$ = "[" + $2 + "]"; }
+  { $$ = ["[" , $2 , "]"]; }
   | '(' expressions ')' wrappedexpressions
-  { $$ = "(" + $2 + ")" + $4; }
+  { $$ = ["(" , $2 , ")" , $4]; }
   | '[' expressions ']' wrappedexpressions
-  { $$ = "[" + $2 + "]" + $4; }
+  { $$ = ["[", $2, "]", $4]; }
   ;
 
 constants
@@ -453,7 +482,7 @@ expressions
 nonemptyexpressions
   :
   expression ',' nonemptyexpressions
-    { $$ = $1 + "," + $3; }
+    { $$ = [$1, ",", $3]; }
   | expression
     { $$ = $1; }
   ;
@@ -502,8 +531,7 @@ identifier
   'Identifier'
     {{
       var id = yytext;
-      var renamed = getRenamedVarIfPossible(id);
-      $$ = [id, renamed];
+      $$ = [id, {env:currentEnv(), id:id}];
     }}
   ;
 

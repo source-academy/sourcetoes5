@@ -21,6 +21,7 @@
 <script>
   let result = '';
   for (const code of tests) {
+    resetParser();
     result += `<pre class='in'>${code}</pre>`;
     try {
       const parsed = parser.parse(code);

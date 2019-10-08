@@ -17,6 +17,7 @@
   const o = document.getElementById("out");
   i.addEventListener('input', () => {
     let result;
+    resetParser();
     try {
       result = new Option(parser.parse(i.value)).innerHTML;
     } catch (e) {
