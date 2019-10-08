@@ -311,7 +311,7 @@ expression
     }}
   | '+' expression %prec UPLUS
     {{
-      $$ = ["," , $2];
+      $$ = ["+" , $2];
     }}
   | '!' expression
     {{
@@ -373,8 +373,6 @@ expression
   | constants
     { $$ = $1; }
 
-  | wrappedexpressions
-
   | identifier wrappedexpressions
     {{ $$ = [$1[1] , $2]}}
 
@@ -385,6 +383,18 @@ expression
 
   | identifier
     { $$ = $1[1]; }
+
+  | '(' expression ')'
+    { $$ = ['(', $2, ')']; }
+
+  | '(' expression ')' wrappedexpressions
+    { $$ = ['(', $2, ')', $4]; }
+
+  | '[' expressions ']' wrappedexpressions
+    { $$ = ['[', $2, ']', $4]; }
+
+  | '[' expressions ']'
+    { $$ = ['[', $2, ']']; }
   ;
 
 wrappedexpressions
@@ -489,7 +499,7 @@ nonemptyexpressions
 
 idarrow
   :
-  identifier '=>'
+  identifier '=>' %prec ARROW
   {{
   	pushStack();
   	$$ = getNewName($1[0]);

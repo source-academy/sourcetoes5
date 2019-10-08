@@ -1,4 +1,5 @@
 const tests = [
+  `(value +value)(value*2)(x+3)[x][n=>x](value + (value + 2) * value)(1+value);`,
   `const a = 1;
 const b ='b';
 if (a === 1) {
