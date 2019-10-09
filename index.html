@@ -10,16 +10,16 @@
 <pre id = "out">
 
 </pre>
-<script src = "parser.js">
+<script src = "acorn.js"></script>
+<script src = "parse.js">
 </script>
 <script>
   const i = document.getElementById("in");
   const o = document.getElementById("out");
   i.addEventListener('input', () => {
     let result;
-    resetParser();
     try {
-      result = new Option(parser.parse(i.value)).innerHTML;
+      result = new Option(parse(i.value)).innerHTML;
     } catch (e) {
       result = new Option(e).innerHTML;
     }

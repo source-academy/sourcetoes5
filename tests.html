@@ -17,18 +17,18 @@
 </head>
 <body>
 <div id = "result"></div>
-<script src = "tests.js"></script><script src = "parser.js"></script>
+<script src = "tests.js"></script><script src = "acorn.js"></script><script src = "parse.js"></script>
 <script>
   let result = '';
   for (const code of tests) {
-    resetParser();
     result += `<pre class='in'>${code}</pre>`;
+    let parsed;
     try {
-      const parsed = parser.parse(code);
+      parsed = parse(code);
       eval(`()=>{${parsed}}`);
       result +=`<pre class='out-success'>${new Option(parsed).innerHTML}</pre>`;
     } catch (e) {
-      result += `<pre class='out-failure'>${new Option(e).innerHTML}</pre>`;
+      result += `<pre class='out-failure'>${parsed || ""}${new Option(e).innerHTML}</pre>`;
     }
     result += '<hr>';
     document.getElementById("result").innerHTML = result;
