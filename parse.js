@@ -2,16 +2,17 @@ var envs = [{}];
 var counter = 0;
 
 if (typeof module !== 'undefined') {
-  var meriyah = require('meriyah');
+  var acorn = require('acorn');
   exports.parse = parse;
 }
 
 function parse(code) {
   envs = [{}];
   counter = 0;
-  return transpile(meriyah.parse(code, {
-    raw: true,
-    impliedStrict: false
+  return transpile(acorn.parse(code, {
+    ecmaVersion: 6,
+    sourceType: "script",
+    allowHashBang: true
   }));
 }
 
@@ -147,7 +148,7 @@ var walkers = {
     return getIdentifier(id.name);
   },
   Literal: function (lit) {
-    return lit.raw;
+    return JSON.stringify(lit.value);
   },
   BreakStatement: function () {
     return "break;\n";
