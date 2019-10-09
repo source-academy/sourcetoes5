@@ -1,0 +1,19 @@
+{
+  "name": "sourcetoes5",
+  "version": "0.0.1",
+  "description": "Transpiles Source to ES5",
+  "main": "parse.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/source-academy/sourcetoes5.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/source-academy/sourcetoes5/issues"
+  },
+  "homepage": "https://github.com/source-academy/sourcetoes5#readme",
+  "dependencies": {
+    "acorn": ">= 5.0 && < 5.1"
+  }
+}
