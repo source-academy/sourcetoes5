@@ -3,7 +3,11 @@ var counter = 0;
 function parse(code) {
   envs = [{}];
   counter = 0;
-  return transpile(acorn.parse(code));
+  return transpile(acorn.parse(code, {
+    ecmaVersion: 6,
+    sourceType: "script",
+    allowHashBang: true
+  }));
 }
 
 function transpile(ast) {
