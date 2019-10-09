@@ -136,10 +136,7 @@ var walkers = {
     return getIdentifier(id.name);
   },
   Literal: function (lit) {
-    if (typeof lit.value === "string") {
-      return '"' + lit.value.replace(/"/g, "\\\"").replace(/\n/g, "\\n") + '"';
-    }
-    return String(lit.value);
+    return JSON.stringify(lit.value);
   },
   BreakStatement: function () {
     return "break;\n";
