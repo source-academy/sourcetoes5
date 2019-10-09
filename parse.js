@@ -38,7 +38,7 @@ function getIdentifier(name) {
 }
 
 function hoistIdentifier(name) {
-  const env = currentEnv();
+  var env = currentEnv();
   if (env.hasOwnProperty(name)) {
     return env[name];
   }
