@@ -10,6 +10,10 @@ function parse(code) {
   }));
 }
 
+if (typeof module !== 'undefined') {
+    module.exports = exports = parse;
+}
+
 function transpile(ast, desc) {
   if (ast === null) {
     throw SyntaxError("Missing " + (desc ? desc : "token"));
