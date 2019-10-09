@@ -10,7 +10,7 @@ function transpile(ast) {
   if (walkers.hasOwnProperty(ast.type)) {
     return walkers[ast.type](ast);
   } else {
-    throw Error("e");
+    throw Error("Unknown syntax: " + ast.type);
   }
 }
 function makeUnique(name) {
