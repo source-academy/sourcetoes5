@@ -10,8 +10,10 @@ function parse(code) {
   }));
 }
 
-function transpile(ast) {
-  if (walkers.hasOwnProperty(ast.type)) {
+function transpile(ast, desc) {
+  if (ast === null) {
+    throw SyntaxError("Missing " + (desc ? desc : "token"));
+  } else if (walkers.hasOwnProperty(ast.type)) {
     return walkers[ast.type](ast);
   } else {
     throw Error("Unknown syntax: " + ast.type);
@@ -153,7 +155,7 @@ var walkers = {
   },
   ForStatement: function (f) {
     pushEnv();
-    return "for (" + transpile(f.init) + (f.init.type === 'AssignmentExpression' ? ";" : "") + transpile(f.test) + ";" + transpile(f.update) + ")\n" + transpile(f.body) + "\n";
+    return "for (" + transpile(f.init, "initialiser in for statement") + (f.init.type === 'AssignmentExpression' ? ";" : "") + transpile(f.test, "test in for statement") + ";" + transpile(f.update, "update in for statement") + ")\n" + transpile(f.body) + "\n";
   },
   ArrayExpression: function (arr) {
     return "[" + arr.elements.map(transpile).join(", ") + "]";
