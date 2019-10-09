@@ -3,7 +3,7 @@ var counter = 0;
 
 if (typeof module !== 'undefined') {
   var meriyah = require('meriyah');
-  module.exports = exports = parse;
+  exports.parse = parse;
 }
 
 function parse(code) {
