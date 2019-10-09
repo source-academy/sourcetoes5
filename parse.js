@@ -1,5 +1,11 @@
 var envs = [{}];
 var counter = 0;
+
+if (typeof module !== 'undefined') {
+  var acorn = require('acorn');
+  module.exports = exports = parse;
+}
+
 function parse(code) {
   envs = [{}];
   counter = 0;
@@ -8,10 +14,6 @@ function parse(code) {
     sourceType: "script",
     allowHashBang: true
   }));
-}
-
-if (typeof module !== 'undefined') {
-    module.exports = exports = parse;
 }
 
 function transpile(ast, desc) {
