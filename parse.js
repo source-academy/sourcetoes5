@@ -148,7 +148,7 @@ var walkers = {
     return getIdentifier(id.name);
   },
   Literal: function (lit) {
-    return JSON.stringify(lit.value);
+    return lit.raw;
   },
   BreakStatement: function () {
     return "break;\n";
