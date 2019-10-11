@@ -106,7 +106,6 @@ var walkers = {
     return transpile(expr.expression) + ";\n";
   },
   IfStatement: function (cond) {
-    console.log(cond.alternate);
     return "if (" + transpile(cond.test) + ")\n" + transpile(cond.consequent) + "else\n" +
       transpile(cond.alternate) + "\n";
   },
