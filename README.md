@@ -21,8 +21,8 @@ It also accepts non-Source languages as a bonus.
 
 We just replace `const` and `let` with `var`. Yeah. This allows reassignment of constants. 
 
-Bigger issue is scoping, since `var` has function scope but `let` and `const` have block scope. Thus we do a simple renaming of all variables so that they refer to the correct scope. This unfortunately poses debugging issues. Luckily, the renaming only appends a `$xx` where `xx` is some number, so the left part still refers to a correct variable name.
+Bigger issue is scoping, since `var` has function scope but `let` and `const` have block scope. Thus we do a simple renaming of all variables so that they refer to the correct scope. This unfortunately poses debugging issues. Luckily, the renaming only appends a `$xx`, where `xx` is some number, so the left part still refers to a correct variable name.
 
 ## `=>`
 
-We replace these with anonymoous function expressions: `(function () { ...; return ...; })`. These shouldn't cause any problems.
+We replace these with anonymous function expressions: `(function () { ...; return ...; })`. These shouldn't cause any problems.
